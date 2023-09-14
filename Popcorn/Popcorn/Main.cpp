@@ -60,7 +60,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 //
 //  PURPOSE: Registers the window class.
 //
-//------------------------------------------------------------------------------------------------------------
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
     WNDCLASSEXW wcex;
@@ -92,7 +91,6 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 //        In this function, we save the instance handle in a global variable and
 //        create and display the main program window.
 //
-//------------------------------------------------------------------------------------------------------------
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // Store instance handle in our global variable
@@ -117,9 +115,30 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 //------------------------------------------------------------------------------------------------------------
+void Drow_Brick(HDC hdc, bool is_blue)
+{//Вывод кирпича
+
+}
+
+//------------------------------------------------------------------------------------------------------------
 void Draw_Frame(HDC hdc)
 {// Отрисовка экаран игры
    
+   HPEN red_pen = CreatePen(PS_SOLID, 0, RGB(255, 85, 255));
+   SelectObject(hdc, red_pen);
+
+   HBRUSH red_brush = CreateSolidBrush(RGB(255, 85, 255));
+   SelectObject(hdc, red_brush);
+
+   Rectangle(hdc, 8 * 3, 6 * 3, (8 + 15) * 3, (6 + 7) * 3);
+
+   HPEN blue_pen = CreatePen(PS_SOLID, 0, RGB(85, 255, 255));
+   SelectObject(hdc, blue_pen);
+
+   HBRUSH blue_brush = CreateSolidBrush(RGB(85, 255, 255));
+   SelectObject(hdc, blue_brush);
+
+   Rectangle(hdc, 8 * 3, (6 + 8) * 3, (8 + 15) * 3, (6 + 7 + 8) * 3);
 };
 //------------------------------------------------------------------------------------------------------------
 //
