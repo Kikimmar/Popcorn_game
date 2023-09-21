@@ -11,14 +11,6 @@ HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
-const int Global_Scale = 3;
-const int Brick_Width = 15;
-const int Brick_Height = 7;
-const int Cell_Width = 16;
-const int Cell_Height = 8;
-const int Level_X_Offset = 8;
-const int Level_Y_Offset = 6;
-
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -68,7 +60,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 //
 //  PURPOSE: Registers the window class.
 //
-//------------------------------------------------------------------------------------------------------------
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
     WNDCLASSEXW wcex;
@@ -82,7 +73,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.hInstance      = hInstance;
     wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_POPCORN));
     wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
-    wcex.hbrBackground  = CreateSolidBrush(RGB(0, 0, 0));
+    wcex.hbrBackground  = CreateSolidBrush(RGB(15, 63, 31));
     wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_POPCORN);
     wcex.lpszClassName  = szWindowClass;
     wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
@@ -104,11 +95,13 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // Store instance handle in our global variable
 
-   RECT window_rect;
+   Init();
+
+   RECT window_rect; 
    window_rect.left = 0;
    window_rect.top = 0;
-   window_rect.right = 320 * Global_Scale;
-   window_rect.bottom = 200 * Global_Scale;
+   window_rect.right = 320 * 3;
+   window_rect.bottom = 200 * 3;
 
    AdjustWindowRect(&window_rect, WS_OVERLAPPEDWINDOW, TRUE);
 
@@ -123,41 +116,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    return TRUE;
 }
-//------------------------------------------------------------------------------------------------------------
-void Draw_Brick(HDC hdc, int x, int y, bool is_blue)
-{// Отрисовка "кирпича"
-   HPEN pen;
-   HBRUSH brush;
-   
-   if (is_blue)
-   {
-      pen = CreatePen(PS_SOLID, 0, RGB(85, 255, 255));
-      brush = CreateSolidBrush(RGB(85, 255, 255));
-   }
-   else
-   {
-      pen = CreatePen(PS_SOLID, 0, RGB(255, 85, 255));
-      brush = CreateSolidBrush(RGB(255, 85, 255));
-   }
-   SelectObject(hdc, pen);
-   SelectObject(hdc, brush);
-
-   Rectangle(hdc, x * Global_Scale, y * Global_Scale, (x + Brick_Width) * Global_Scale, (y + Brick_Height) * Global_Scale);
-}
- //------------------------------------------------------------------------------------------------------------
-void Draw_Frame(HDC hdc)
-{// Отрисовка экаран игры
-   
-
-   int i, j;
-   for (i = 0; i < 14; i++)
-   {
-      for (j = 0; j < 12; j++)
-      {
-         Draw_Brick(hdc, Level_X_Offset + j * Cell_Width, Level_Y_Offset + i * Cell_Height, true);
-      }
-   }
-};
 //------------------------------------------------------------------------------------------------------------
 //
 //  FUNCTION: WndProc(HWND, UINT, WPARAM, LPARAM)
