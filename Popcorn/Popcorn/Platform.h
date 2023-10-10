@@ -24,9 +24,7 @@ private:
 	HPEN Highlight_Pen, Platform_Circle_Pen, Platform_Inner_Pen;
 	HBRUSH Platform_Circle_Brush, Platform_Inner_Brush;
 
-
 	static const int Height = 7;
 	static const int Circle_Size = 7;
-
 };
 //------------------------------------------------------------------------------------------------------------
