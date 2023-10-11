@@ -12,7 +12,8 @@ void AsEngine::Init_Engine(HWND hwnd)
 
 	Hwnd = hwnd;
 	
-	AActive_Brick::SetupColors();
+	AActive_Brick::
+		SetupColors();
 
 	Ball.Init();
 	Level.Init();
@@ -75,9 +76,14 @@ int AsEngine::On_Key_Down(EKey_Type key_type)
 //------------------------------------------------------------------------------------------------------------
 int AsEngine::On_Timer()
 {
+	++AsConfig::Current_Timer_Tick;
+
 	Ball.Move(Hwnd, &Level, Platform.X_Pos, Platform.Width);
 
 	Level.Active_Brick.Act(Hwnd);
+
+	//if(AsConfig::Current_Timer_Tick % 10 == 0)
+		Platform.Act(Hwnd);
 
 	return 0;
 }
