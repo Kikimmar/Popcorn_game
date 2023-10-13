@@ -61,7 +61,7 @@ void ALevel::Check_Level_Brick_Hit(int& next_y_pos, double& ball_direction)
 	}
 }
 //------------------------------------------------------------------------------------------------------------
-void ALevel::Draw(HWND Hwnd, HDC hdc, RECT& paint_area)
+void ALevel::Draw(HDC hdc, RECT& paint_area)
 {// Вывод всех кирпичей уровня
 
 	int i, j;

@@ -15,7 +15,7 @@ class AActive_Brick
 public:
 	AActive_Brick(EBrick_Type brick_type);
 
-	void Act(HWND Hwnd);
+	void Act();
 	void Draw(HDC hdc, RECT& paint_area);
 	
 	static void SetupColors();
