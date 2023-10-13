@@ -6,6 +6,7 @@
 enum EPlatform_State
 {
 	EPS_Missing,
+	EPS_Ready,
 	EPS_Normal,
 	EPS_Meltdown,
 	EPS_Roll_In,
@@ -19,10 +20,10 @@ public:
 
 	void Init();
 	void Act();
+	EPlatform_State Get_State();
 	void Set_State(EPlatform_State new_state);
-
 	void Redraw_Platform();
-	void Draw(HDC hdc, RECT& paint_area);
+	void Draw(HDC hdc, RECT &paint_area);
 
 	int X_Pos;
 	int Width;
@@ -30,19 +31,17 @@ public:
 
 private:
 	void Clear_BG(HDC hdc);
-	void Draw_Circle_Hilight(HDC hdc, int x, int y);
-	void Draw_Normal_State(HDC hdc, RECT& paint_area);
-	void Draw_Meltdown_State(HDC hdc, RECT& paint_area);
-	void Draw_Roll_In_State(HDC hdc, RECT& paint_area);
-	void Draw_Expand_Roll_In_State(HDC hdc, RECT& paint_area);
-
-
-
-	static const int Normal_Width = 28;
+	void Draw_Circle_Highlight(HDC hdc, int x, int y);
+	void Draw_Normal_State(HDC hdc, RECT &paint_area);
+	void Draw_Meltdown_State(HDC hdc, RECT &paint_area);
+	void Draw_Roll_In_State(HDC hdc, RECT &paint_area);
+	void Draw_Expanding_Roll_In_State(HDC hdc, RECT &paint_area);
 
 	EPlatform_State Platform_State;
 	int Inner_Width;
 	int Rolling_Step;
+
+	static const int Normal_Width = 28;
 
 	int Meltdown_Platform_Y_Pos[Normal_Width * AsConfig::Global_Scale];
 
@@ -55,8 +54,8 @@ private:
 	static const int Circle_Size = 7;
 	static const int Normal_Platform_Inner_Width = Normal_Width - Circle_Size;
 	static const int Meltdown_Speed = 3;
-	static const int Max_Rolling_Step = 8;
-	static const int Rolling_Platform_Speed = 3;
+	static const int Max_Rolling_Step = 16;
 	static const int Roll_In_Platform_End_X_Pos = 99;
+	static const int Rolling_Platform_Speed = 3;
 };
 //------------------------------------------------------------------------------------------------------------

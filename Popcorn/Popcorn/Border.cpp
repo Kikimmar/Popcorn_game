@@ -1,20 +1,20 @@
 ﻿#include "Border.h"
 
-//AsBorder
+// AsBorder
 //------------------------------------------------------------------------------------------------------------
 AsBorder::AsBorder()
-	:Border_Blue_Pen(0), Border_White_Pen(0), Border_Blue_Brush(0), Border_White_Brush(0)
+: Border_Blue_Pen(0), Border_White_Pen(0), Border_Blue_Brush(0), Border_White_Brush(0)
 {
 }
+//------------------------------------------------------------------------------------------------------------
 void AsBorder::Init()
 {
 	AsConfig::Create_Pen_Brush(85, 255, 255, Border_Blue_Pen, Border_Blue_Brush);
 	AsConfig::Create_Pen_Brush(255, 255, 255, Border_White_Pen, Border_White_Brush);
-
 }
-//------------------------------------------------------------------------------------------------------------void AsBorder::Draw_Element(HDC hdc, int x, int y, bool top_border, AsEngine* engine)
-void AsBorder::Draw(HDC hdc, RECT& paint_area)
-{// Рисуем рамку уровня
+//------------------------------------------------------------------------------------------------------------
+void AsBorder::Draw(HDC hdc, RECT &paint_area)
+{// Рисует рамку уровня
 
 	int i;
 
@@ -26,15 +26,15 @@ void AsBorder::Draw(HDC hdc, RECT& paint_area)
 	for (i = 0; i < 50; i++)
 		Draw_Element(hdc, 201, 1 + i * 4, false);
 
-	// 2. Линия сверху
+	// 3. Линия сверху
 	for (i = 0; i < 50; i++)
 		Draw_Element(hdc, 3 + i * 4, 0, true);
 }
 //------------------------------------------------------------------------------------------------------------
 void AsBorder::Draw_Element(HDC hdc, int x, int y, bool top_border)
-{// Рисуем элемент рамки  уровня
+{// Рисует элемент рамки уровня
 
-	// Основная линия
+ // Основная линия
 	SelectObject(hdc, Border_Blue_Pen);
 	SelectObject(hdc, Border_Blue_Brush);
 
@@ -46,7 +46,6 @@ void AsBorder::Draw_Element(HDC hdc, int x, int y, bool top_border)
 	// Белая кайма
 	SelectObject(hdc, Border_White_Pen);
 	SelectObject(hdc, Border_White_Brush);
-
 
 	if (top_border)
 		Rectangle(hdc, x * AsConfig::Global_Scale, y * AsConfig::Global_Scale, (x + 4) * AsConfig::Global_Scale, (y + 1) * AsConfig::Global_Scale);

@@ -13,14 +13,13 @@ public:
 
 	unsigned char R, G, B;
 };
-
 //------------------------------------------------------------------------------------------------------------
 class AsConfig
 {
 public:
-	static void SetupColors();
-	static void Create_Pen_Brush(const AColor &color, HPEN& pen, HBRUSH& brush);
-	static void Create_Pen_Brush(unsigned char r, unsigned char g, unsigned char b, HPEN& pen, HBRUSH& brush);
+	static void Setup_Colors();
+	static void Create_Pen_Brush(const AColor &color, HPEN &pen, HBRUSH &brush);
+	static void Create_Pen_Brush(unsigned char r, unsigned char g, unsigned char b, HPEN &pen, HBRUSH &brush);
 	static int Rand(int range);
 
 	static int Current_Timer_Tick;
@@ -28,7 +27,6 @@ public:
 	static HPEN BG_Pen;
 	static HBRUSH BG_Brush;
 	static HWND Hwnd;
-
 
 	static const int Global_Scale = 3;
 	static const int Border_X_Offset = 6;

@@ -18,10 +18,10 @@ char ALevel::Level_01[AsConfig::Level_Height][AsConfig::Level_Width] =
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 
-//ALevel
+// ALevel
 //------------------------------------------------------------------------------------------------------------
 ALevel::ALevel()
-: Active_Brick(EBT_Blue), Brick_Red_Pen(0), Brick_Blue_Pen(0), Letter_Pen(0), Brick_Red_Brush(0), Brick_Blue_Brush(0), Level_Rect{}
+: Has_Floor(false), Active_Brick(EBT_Red), Brick_Red_Pen(0), Brick_Blue_Pen(0), Letter_Pen(0), Brick_Red_Brush(0), Brick_Blue_Brush(0), Level_Rect{}
 {
 }
 //------------------------------------------------------------------------------------------------------------
@@ -38,7 +38,7 @@ void ALevel::Init()
 	Level_Rect.bottom = Level_Rect.top + AsConfig::Cell_Height * AsConfig::Level_Height * AsConfig::Global_Scale;
 }
 //------------------------------------------------------------------------------------------------------------
-void ALevel::Check_Level_Brick_Hit(int& next_y_pos, double& ball_direction)
+void ALevel::Check_Level_Brick_Hit(double &next_y_pos, double &ball_direction)
 {// Корректируем позицию при отражении от кирпичей
 
 	int i, j;
@@ -57,18 +57,18 @@ void ALevel::Check_Level_Brick_Hit(int& next_y_pos, double& ball_direction)
 				ball_direction = -ball_direction;
 			}
 		}
+
 		brick_y_pos -= AsConfig::Cell_Height;
 	}
 }
 //------------------------------------------------------------------------------------------------------------
-void ALevel::Draw(HDC hdc, RECT& paint_area)
+void ALevel::Draw(HDC hdc, RECT &paint_area)
 {// Вывод всех кирпичей уровня
 
 	int i, j;
-
 	RECT intersection_rect;
 
-	if (!IntersectRect(&intersection_rect, &paint_area, &Level_Rect))
+	if (! IntersectRect(&intersection_rect, &paint_area, &Level_Rect) )
 		return;
 
 	for (i = 0; i < AsConfig::Level_Height; i++)
@@ -166,7 +166,9 @@ void ALevel::Draw_Brick_Letter(HDC hdc, int x, int y, EBrick_Type brick_type, EL
 		else
 			switch_color = false;
 	}
+
 	Set_Brick_Letter_Colors(switch_color, front_pen, front_brush, back_pen, back_brush);
+
 
 	if (rotation_step == 4 || rotation_step == 12)
 	{
@@ -218,6 +220,7 @@ void ALevel::Draw_Brick_Letter(HDC hdc, int x, int y, EBrick_Type brick_type, EL
 				Ellipse(hdc, 0 + 5 * AsConfig::Global_Scale, (-5 * AsConfig::Global_Scale) / 2, 0 + 10 * AsConfig::Global_Scale, 5 * AsConfig::Global_Scale / 2);
 			}
 		}
+
 		SetWorldTransform(hdc, &old_xform);
 	}
 }

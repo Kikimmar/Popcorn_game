@@ -1,8 +1,9 @@
 ﻿#include "Engine.h"
 
-//AsEngine
+// AsEngine
 //------------------------------------------------------------------------------------------------------------
 AsEngine::AsEngine()
+: Game_State(EGS_Play_Level)
 {
 }
 //------------------------------------------------------------------------------------------------------------
@@ -10,33 +11,34 @@ void AsEngine::Init_Engine(HWND hwnd)
 {// Настройка игры при старте
 
 	AsConfig::Hwnd = hwnd;
-	
-	AActive_Brick::
-		SetupColors();
 
-	Ball.Init();
+	AActive_Brick::Setup_Colors();
+
 	Level.Init();
 	Platform.Init();
+	Ball.Init();
 	Border.Init();
 
-	Platform.Set_State(EPS_Roll_In);
+	Ball.Set_State(EBS_Normal, Platform.X_Pos + Platform.Width / 2);
+
+	Platform.Set_State(EPS_Normal);
+
 	Platform.Redraw_Platform();
 
 	SetTimer(AsConfig::Hwnd, Timer_ID, 1000 / AsConfig::FPS, 0);
 }
 //------------------------------------------------------------------------------------------------------------
-void AsEngine::Draw_Frame(HDC hdc, RECT& paint_area)
+void AsEngine::Draw_Frame(HDC hdc, RECT &paint_area)
 {// Отрисовка экрана игры
 
 	Level.Draw(hdc, paint_area);
-
 
 	//int i;
 
 	//for (i = 0; i < 16; i++)
 	//{
-	//	Draw_Brick_Letter(hdc, 20 + i * Cell_Width * AsConfig::Global_Scale, 100, EBT_Blue, ELT_O, i);
-	//	Draw_Brick_Letter(hdc, 20 + i * Cell_Width * AsConfig::Global_Scale, 130, EBT_Red, ELT_O, i);
+	//	Draw_Brick_Letter(hdc, 20 + i * Cell_Width * Global_Scale, 100, EBT_Blue, ELT_O, i);
+	//	Draw_Brick_Letter(hdc, 20 + i * Cell_Width * Global_Scale, 130, EBT_Red, ELT_O, i);
 	//}
 
 	Ball.Draw(hdc, paint_area);
@@ -57,6 +59,7 @@ int AsEngine::On_Key_Down(EKey_Type key_type)
 		Platform.Redraw_Platform();
 		break;
 
+
 	case EKT_Right:
 		Platform.X_Pos += Platform.X_Step;
 
@@ -66,7 +69,13 @@ int AsEngine::On_Key_Down(EKey_Type key_type)
 		Platform.Redraw_Platform();
 		break;
 
+
 	case EKT_Space:
+		if (Platform.Get_State() == EPS_Ready)
+		{
+			Ball.Set_State(EBS_Normal, Platform.X_Pos + Platform.Width / 2);
+			Platform.Set_State(EPS_Normal);
+		}
 		break;
 	}
 
@@ -77,12 +86,42 @@ int AsEngine::On_Timer()
 {
 	++AsConfig::Current_Timer_Tick;
 
-	Ball.Move(&Level, Platform.X_Pos, Platform.Width);
+	switch (Game_State)
+	{
+	case EGS_Play_Level:
+		Ball.Move(&Level, Platform.X_Pos, Platform.Width);
 
-	Level.Active_Brick.Act();
+		if (Ball.Get_State() == EBS_Lost)
+		{
+			Game_State = EGS_Lost_Ball;
+			Platform.Set_State(EPS_Meltdown);
+		}
+		break;
 
-	//if(AsConfig::Current_Timer_Tick % 10 == 0)
-		Platform.Act();
+
+	case EGS_Lost_Ball:
+		if (Platform.Get_State() == EPS_Missing)
+		{
+			Game_State = EGS_Restart_Level;
+			Platform.Set_State(EPS_Roll_In);
+		}
+		break;
+
+
+	case EGS_Restart_Level:
+		if (Platform.Get_State() == EPS_Ready)
+		{
+			Game_State = EGS_Play_Level;
+			Ball.Set_State(EBS_On_Platform, Platform.X_Pos + Platform.Width / 2);
+		}
+		break;
+	}
+
+	Platform.Act();
+
+	//Level.Active_Brick.Act();
+
+	//if (AsConfig::Current_Timer_Tick % 10 == 0)
 
 	return 0;
 }
